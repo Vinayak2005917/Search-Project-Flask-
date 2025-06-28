@@ -83,7 +83,7 @@ function displayResults(data) {
     if (typeof data.elapsed_time === 'number') {
         timeText = ` in ${(data.elapsed_time * 1000).toFixed(2)} ms`;
     }
-    resultsCount.textContent = `${data.results_count} results found for "${data.query}"${timeText}`;
+    resultsCount.textContent = `${data.results_count} results found${timeText}`;
 
     // Clear previous results
     resultsList.innerHTML = '';
