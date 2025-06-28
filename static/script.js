@@ -26,15 +26,37 @@ function setupEventListeners() {
 function performSearch() {
     const query = document.getElementById('searchInput').value.trim();
     
+    if (!query) {
+        alert('Please enter a search term');
+        return;
+    }
+    
     // Show loading indicator
     showLoading();
 
-    // TODO: Add actual search implementation here
-    
-    setTimeout(() => {
+    // Make API call to Flask backend
+    fetch('/search', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: query })
+    })
+    .then(response => response.json())
+    .then(data => {
         hideLoading();
-        // TODO: Display results
-    }, 800);
+        if (data.error) {
+            console.error('Search error:', data.error);
+            showNoResults();
+        } else {
+            displayResults(data);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        hideLoading();
+        showNoResults();
+    });
 }
 
 function showLoading() {
@@ -45,4 +67,67 @@ function showLoading() {
 
 function hideLoading() {
     document.getElementById('loadingIndicator').style.display = 'none';
+}
+
+function displayResults(data) {
+    const resultsContainer = document.getElementById('resultsContainer');
+    const resultsList = document.getElementById('resultsList');
+    const resultsCount = document.getElementById('resultsCount');
+    const noResults = document.getElementById('noResults');
+    
+    // Hide no results message
+    noResults.style.display = 'none';
+    
+    // Update results count
+    resultsCount.textContent = `${data.results_count} results found for "${data.query}"`;
+    
+    // Clear previous results
+    resultsList.innerHTML = '';
+    
+    if (data.results_count > 0) {
+        // Show results container
+        resultsContainer.style.display = 'block';
+        
+        // Create result items
+        data.results.forEach(result => {
+            const resultItem = createResultItem(result, data.query);
+            resultsList.appendChild(resultItem);
+        });
+    } else {
+        showNoResults();
+    }
+}
+
+function createResultItem(result, query) {
+    const div = document.createElement('div');
+    div.className = 'result-item';
+    
+    // Highlight the search term in the content
+    const highlightedContent = highlightSearchTerm(result.content, query);
+    
+    div.innerHTML = `
+        <div class="result-header">
+            <div class="result-title">Line ${result.line_number}</div>
+            <div class="result-meta">Position: ${result.position}</div>
+        </div>
+        <div class="result-content">${highlightedContent}</div>
+    `;
+    
+    return div;
+}
+
+function highlightSearchTerm(text, searchTerm) {
+    if (!searchTerm || !text) return text;
+    
+    const regex = new RegExp(`(${escapeRegex(searchTerm)})`, 'gi');
+    return text.replace(regex, '<mark>$1</mark>');
+}
+
+function escapeRegex(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function showNoResults() {
+    document.getElementById('resultsContainer').style.display = 'none';
+    document.getElementById('noResults').style.display = 'block';
 }
