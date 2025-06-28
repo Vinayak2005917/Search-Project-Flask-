@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Inbox</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Search Inbox</h1>
+            <p>Mini Project showcasing Horspool's algorithm using Python Flask</p>
+        </div>
+
+        <div class="search-section">
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search for anything..." id="searchInput">
+                <button class="search-btn" onclick="performSearch()">🔍</button>
+            </div>
+
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="documents">Documents</button>
+                <button class="filter-btn" data-filter="images">Images</button>
+                <button class="filter-btn" data-filter="videos">Videos</button>
+                <button class="filter-btn" data-filter="emails">Emails</button>
+                <button class="filter-btn" data-filter="recent">Recent</button>
+            </div>
+
+            <div class="results-container" id="resultsContainer">
+                <div class="results-header">
+                    <div class="results-count" id="resultsCount">0 results found</div>
+                    <select class="sort-dropdown" id="sortDropdown">
+                        <option value="relevance">Sort by Relevance</option>
+                        <option value="date">Sort by Date</option>
+                        <option value="name">Sort by Name</option>
+                        <option value="size">Sort by Size</option>
+                    </select>
+                </div>
+
+                <div class="results-list" id="resultsList">
+                    <!-- Results will be populated here -->
+                </div>
+            </div>
+
+            <div class="loading" id="loadingIndicator" style="display: none;">
+                <div class="spinner"></div>
+                <p>Searching...</p>
+            </div>
+
+            <div class="no-results" id="noResults" style="display: none;">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <h3>No results found</h3>
+                <p>Try adjusting your search terms or filters</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
