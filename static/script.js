@@ -1,4 +1,4 @@
-let currentFilter = 'all';
+let currentFilter = 'Linear';
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
@@ -19,28 +19,29 @@ function setupEventListeners() {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             currentFilter = this.dataset.filter;
+            performSearch(); // Re-search when filter changes
         });
     });
 }
 
 function performSearch() {
     const query = document.getElementById('searchInput').value.trim();
-    
     if (!query) {
         alert('Please enter a search term');
         return;
     }
-    
-    // Show loading indicator
     showLoading();
-
-    // Make API call to Flask backend
+    // Use the currentFilter to select the algorithm
+    let algorithm = currentFilter;
+    // Normalize filter names if needed
+    if (algorithm === 'all') algorithm = 'Linear';
+    if (algorithm === 'Horspool ') algorithm = 'Horspool';
     fetch('/search', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ query: query })
+        body: JSON.stringify({ query: query, algorithm: algorithm })
     })
     .then(response => response.json())
     .then(data => {
@@ -58,7 +59,6 @@ function performSearch() {
         showNoResults();
     });
 }
-
 function showLoading() {
     document.getElementById('loadingIndicator').style.display = 'block';
     document.getElementById('resultsContainer').style.display = 'none';
