@@ -4,6 +4,7 @@ from linear_search import linear_search, read_data_file as read_linear_data_file
 from Hoospool import horspool_search, read_data_file as read_horspool_data_file
 from Boyer_Moore import boyer_moore_search, read_data_file as read_boyer_data_file
 import os
+import time
 
 app = flask.Flask(__name__)
 
@@ -26,6 +27,7 @@ def search():
         normalized_algorithm = algorithm.replace('-', '_').replace(' ', '').lower()
         data_file_path = os.path.join(os.path.dirname(__file__), 'data.txt')
 
+        start_time = time.perf_counter()
         if normalized_algorithm == 'linear':
             text_data = read_linear_data_file(data_file_path)
             if not text_data:
@@ -43,11 +45,12 @@ def search():
             results = boyer_moore_search(text_data, query)
         else:
             return jsonify({'error': f'Unknown algorithm: {algorithm}'}), 400
-
+        elapsed_time = time.perf_counter() - start_time
         return jsonify({
             'query': query,
             'results_count': len(results),
-            'results': results[:50]  # Limit to first 50 results for performance
+            'results': results[:50],  # Limit to first 50 results for performance
+            'elapsed_time': elapsed_time
         })
         
     except Exception as e:

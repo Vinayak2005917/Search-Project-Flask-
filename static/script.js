@@ -74,20 +74,24 @@ function displayResults(data) {
     const resultsList = document.getElementById('resultsList');
     const resultsCount = document.getElementById('resultsCount');
     const noResults = document.getElementById('noResults');
-    
+
     // Hide no results message
     noResults.style.display = 'none';
-    
-    // Update results count
-    resultsCount.textContent = `${data.results_count} results found for "${data.query}"`;
-    
+
+    // Update results count and show timer
+    let timeText = '';
+    if (typeof data.elapsed_time === 'number') {
+        timeText = ` in ${(data.elapsed_time * 1000).toFixed(2)} ms`;
+    }
+    resultsCount.textContent = `${data.results_count} results found for "${data.query}"${timeText}`;
+
     // Clear previous results
     resultsList.innerHTML = '';
-    
+
     if (data.results_count > 0) {
         // Show results container
         resultsContainer.style.display = 'block';
-        
+
         // Create result items
         data.results.forEach(result => {
             const resultItem = createResultItem(result, data.query);
