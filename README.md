@@ -1,11 +1,11 @@
 # Search Project
 
-A mini project showcasing a series of string search algorithms (Linear Search, Horspool, and Boyer-Moore) using Python Flask for the backend and a modern JavaScript frontend.
+A mini project showcasing a series of string search algorithms (Linear Search, Horspool, and Boyer-Moore) using Python Flask for the backend and JavaScript frontend. Feel Free to download the zip file and play around with it or make forks on this repo. For now, the data.txt file just contains 200 lines of lorem ipsum. Feel free to modify it to suit your needs.
 
 ## Features
 
 - **Search Algorithms:** Choose between Linear Search, Horspool, and Boyer-Moore.
-- **Fast Search:** Results are displayed instantly with a timer showing how long the search took.
+- **Fast Search:** Results are displayed instantly, with a timer showing how long the search took.
 - **Case-insensitive:** Searches are not case-sensitive.
 - **Highlighting:** Search terms are highlighted in the results.
 - **Responsive UI:** Clean, modern interface with filter buttons for algorithm selection.
